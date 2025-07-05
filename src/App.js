@@ -1,23 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import ConsecutiveDaysDisplay from './components/ConsecutiveDaysDisplay';
+import './App.css'; // スタイルファイルもそのまま利用
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>うちらのメモリー🤝</h1>
       </header>
+      <main>
+        <ConsecutiveDaysDisplay />
+        {/* ここに、他の連絡履歴表示や追加・編集フォームなどのコンポーネントを追加していきます */}
+      </main>
     </div>
   );
 }
