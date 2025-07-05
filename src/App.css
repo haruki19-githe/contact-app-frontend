@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+/* 既存のCSSがあればそのまま残し、以下の内容を追加 */
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05); /* 少し拡大 */
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
