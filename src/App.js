@@ -1,5 +1,6 @@
 import React from 'react';
 import ConsecutiveDaysDisplay from './components/ConsecutiveDaysDisplay';
+import ContactLogList from './components/ContactLogList'; // この行を追加
 import './App.css'; // スタイルファイルもそのまま利用
 
 function App() {
@@ -10,7 +11,8 @@ function App() {
       </header>
       <main>
         <ConsecutiveDaysDisplay />
-        {/* ここに、他の連絡履歴表示や追加・編集フォームなどのコンポーネントを追加していきます */}
+        <hr style={{ margin: '30px 0' }} /> {/* 区切り線を追加 */}
+                <ContactLogList /> {/* この行を追加 */}
       </main>
     </div>
   );
