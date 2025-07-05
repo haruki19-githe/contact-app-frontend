@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-// onEditRecord propを追加
-function ContactLogList({ onEditRecord }) {
+// onEditRecord に加えて onDeleteRecord prop を追加
+function ContactLogList({ onEditRecord, onDeleteRecord }) {
     const [contactLogs, setContactLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     // APIからデータを取得する関数を独立させる
+    // この関数は、データが追加/更新/削除された後に再実行されるようにします
     const fetchContactLogs = async () => {
         try {
             const response = await fetch('/ContactLogList');
@@ -23,9 +24,38 @@ function ContactLogList({ onEditRecord }) {
         }
     };
 
+    // コンポーネントがマウントされた時、または onRecordAddedOrDeleted のトリガーでリストを更新
     useEffect(() => {
         fetchContactLogs();
-    }, []);
+    }, [onDeleteRecord]); // onDeleteRecord が変更された時にも再フェッチする（App.jsからのトリガー用）
+
+    // 削除処理のハンドラ
+    const handleDelete = async (id) => {
+        if (window.confirm('この連絡記録を本当に削除しますか？')) { // 確認ダイアログ
+            try {
+                const response = await fetch(`/deleteContactLog/id/${id}`, { // DELETE /deleteContactLog/id/{id} エンドポイント
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || '連絡記録の削除に失敗しました。');
+                }
+
+                // 削除成功後、リストを再取得して表示を更新
+                // onRecordAddedOrDeleted を親に通知してもよいが、今回は内部で再フェッチ
+                fetchContactLogs();
+                if (onDeleteRecord) { // App.js に通知 (今回は使用しないが汎用的に残す)
+                    onDeleteRecord();
+                }
+
+            } catch (err) {
+                console.error("連絡記録の削除エラー:", err);
+                alert(`削除エラー: ${err.message}`); // ユーザーにエラーを通知
+            }
+        }
+    };
+
 
     if (loading) {
         return <p>連絡記録を読み込み中...</p>;
@@ -50,7 +80,7 @@ function ContactLogList({ onEditRecord }) {
                         <th style={tableHeaderStyle}>連絡日</th>
                         <th style={tableHeaderStyle}>作成日時</th>
                         <th style={tableHeaderStyle}>更新日時</th>
-                        <th style={tableHeaderStyle}>操作</th> {/* この行を追加 */}
+                        <th style={tableHeaderStyle}>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,14 +92,19 @@ function ContactLogList({ onEditRecord }) {
                             <td style={tableCellStyle}>{log.createdAt}</td>
                             <td style={tableCellStyle}>{log.updatedAt}</td>
                             <td style={tableCellStyle}>
-                                {/* 編集ボタンを追加 */}
                                 <button
-                                    onClick={() => onEditRecord(log)} // ボタンクリックでonEditRecordを呼び出す
+                                    onClick={() => onEditRecord(log)}
                                     style={editButtonStyle}
                                 >
                                     編集
                                 </button>
-                            </td> {/* この行を追加 */}
+                                <button
+                                    onClick={() => handleDelete(log.id)} // 削除ボタンを追加
+                                    style={deleteButtonStyle}
+                                >
+                                    削除
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -78,7 +113,7 @@ function ContactLogList({ onEditRecord }) {
     );
 }
 
-// スタイル定義
+// スタイル定義（deleteButtonStyle を追加）
 const tableHeaderStyle = {
     padding: '8px',
     border: '1px solid #ddd',
@@ -93,12 +128,21 @@ const tableCellStyle = {
 
 const editButtonStyle = {
     padding: '5px 10px',
-    backgroundColor: '#ffc107', // 黄色系の色
+    backgroundColor: '#ffc107',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
     cursor: 'pointer',
     marginRight: '5px',
+};
+
+const deleteButtonStyle = { // 新しいスタイル
+    padding: '5px 10px',
+    backgroundColor: '#dc3545', // 赤系の色
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
 };
 
 export default ContactLogList;
