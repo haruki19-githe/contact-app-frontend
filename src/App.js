@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ConsecutiveDaysDisplay from './components/ConsecutiveDaysDisplay';
-import './App.css'; // スタイルファイルもそのまま利用
+import ContactLogList from './components/ContactLogList';
+import AddContactForm from './components/AddContactForm';
+import './App.css';
 
 function App() {
+  const [listKey, setListKey] = useState(0); // リスト更新用のstate
+  const [editingContact, setEditingContact] = useState(null); // 編集中の連絡記録を保持するstate
+
+  // 連絡記録が追加/更新されたときにリストを更新するためのハンドラ
+  const handleRecordAddedOrUpdated = () => {
+    setListKey(prevKey => prevKey + 1); // key を変更して ContactLogList を再レンダリング
+    setEditingContact(null); // フォームを新規追加モードに戻す
+  };
+
+  // 連絡記録を編集するためのハンドラ
+  const handleEditContact = (contact) => {
+    setEditingContact(contact); // 編集対象の連絡記録をセット
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -10,7 +26,27 @@ function App() {
       </header>
       <main>
         <ConsecutiveDaysDisplay />
-        {/* ここに、他の連絡履歴表示や追加・編集フォームなどのコンポーネントを追加していきます */}
+        <hr style={{ margin: '30px 0' }} />
+
+        {/* onRecordAdded を onRecordAddedOrUpdated に変更し、initialContact を渡す */}
+        <AddContactForm
+            onRecordAdded={handleRecordAddedOrUpdated}
+            initialContact={editingContact}
+        />
+        {/* 編集モードをキャンセルするためのボタン（フォームの外に置く場合）
+        {editingContact && (
+            <button onClick={() => setEditingContact(null)} style={{margin: '10px 20px'}}>
+                編集キャンセル
+            </button>
+        )}
+        */}
+        <hr style={{ margin: '30px 0' }} />
+
+        {/* onEditRecord を追加 */}
+        <ContactLogList
+            key={listKey}
+            onEditRecord={handleEditContact}
+        />
       </main>
     </div>
   );
