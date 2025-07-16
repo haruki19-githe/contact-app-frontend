@@ -5,11 +5,12 @@ function ConsecutiveDaysDisplay() {
     const [message, setMessage] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
     useEffect(() => {
         const fetchConsecutiveDays = async () => {
             try {
-                const response = await fetch('/consecutive-days'); // プロキシ設定により http://localhost:8080/consecutive-days にアクセスします
+                const response = await fetch('${API_BASE_URL}/consecutive-days'); // プロキシ設定により http://localhost:8080/consecutive-days にアクセスします
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message || '連続日数の取得に失敗しました');
