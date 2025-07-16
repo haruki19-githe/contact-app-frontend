@@ -7,7 +7,10 @@ import './App.css';
 function App() {
   const [listKey, setListKey] = useState(0); // リスト更新用のstate
   const [editingContact, setEditingContact] = useState(null); // 編集中の連絡記録を保持するstate
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'; // ローカル開発用にフォールバック
 
+
+// API_BASE_URL を使用してバックエンドにリクエストを送信
   // 連絡記録が追加/更新されたときにリストを更新するためのハンドラ
   const handleRecordAddedOrUpdated = () => {
     setListKey(prevKey => prevKey + 1); // key を変更して ContactLogList を再レンダリング

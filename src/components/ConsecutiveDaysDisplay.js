@@ -5,7 +5,7 @@ function ConsecutiveDaysDisplay() {
     const [message, setMessage] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'; // ローカル開発用にフォールバック
 
     useEffect(() => {
         const fetchConsecutiveDays = async () => {
