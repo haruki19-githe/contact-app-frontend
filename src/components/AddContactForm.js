@@ -7,7 +7,7 @@ function AddContactForm({ onRecordAdded, initialContact }) {
     const [contactDate, setContactDate] = useState(''); // YYYY-MM-DD 形式
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL_test || 'http://localhost:8080'; // ローカル開発用にフォールバック
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'; // ローカル開発用にフォールバック
 
     // initialContact が変更されたときにフォームの値を更新する
     useEffect(() => {
