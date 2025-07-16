@@ -5,13 +5,12 @@ function ContactLogList({ onEditRecord, onDeleteRecord }) {
     const [contactLogs, setContactLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080'; // ローカル開発用にフォールバック
 
     // APIからデータを取得する関数を独立させる
     // この関数は、データが追加/更新/削除された後に再実行されるようにします
     const fetchContactLogs = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/ContactLogList``);
+            const response = await fetch('/ContactLogList');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -34,7 +33,7 @@ function ContactLogList({ onEditRecord, onDeleteRecord }) {
     const handleDelete = async (id) => {
         if (window.confirm('この連絡記録を本当に削除しますか？')) { // 確認ダイアログ
             try {
-                const response = await fetch(`${API_BASE_URL}/deleteContactLog/id/${id}`, { // DELETE /deleteContactLog/id/{id} エンドポイント
+                const response = await fetch(`/deleteContactLog/id/${id}`,  { // DELETE /deleteContactLog/id/{id} エンドポイント
                     method: 'DELETE',
                 });
 
