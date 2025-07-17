@@ -10,7 +10,8 @@ function ContactLogList({ onEditRecord, onDeleteRecord }) {
     // この関数は、データが追加/更新/削除された後に再実行されるようにします
     const fetchContactLogs = async () => {
         try {
-            const response = await fetch('/ContactLogList');
+            const baseUrl = process.env.REACT_APP_API_BASE_URL; //
+                        const response = await fetch(`${baseUrl}/ContactLogList`); //
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -33,7 +34,8 @@ function ContactLogList({ onEditRecord, onDeleteRecord }) {
     const handleDelete = async (id) => {
         if (window.confirm('この連絡記録を本当に削除しますか？')) { // 確認ダイアログ
             try {
-                const response = await fetch(`/deleteContactLog/id/${id}`,  { // DELETE /deleteContactLog/id/{id} エンドポイント
+            const baseUrl = process.env.REACT_APP_API_BASE_URL;
+                const response = await fetch(`${baseUrl}/deleteContactLog/id/${id}`,  { // DELETE /deleteContactLog/id/{id} エンドポイント
                     method: 'DELETE',
                 });
 

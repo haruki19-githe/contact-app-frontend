@@ -10,7 +10,8 @@ function ConsecutiveDaysDisplay() {
         const fetchConsecutiveDays = async () => {
             try {
                 // プロキシ設定により http://localhost:8080/consecutive-days にアクセスします
-                const response = await fetch('/consecutive-days');
+                const baseUrl = process.env.REACT_APP_API_BASE_URL; //
+                                const response = await fetch(`${baseUrl}/consecutive-days`); //
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message || '連続日数の取得に失敗しました');

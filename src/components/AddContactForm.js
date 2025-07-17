@@ -36,17 +36,17 @@ function AddContactForm({ onRecordAdded, initialContact }) {
             return;
         }
 
-        try {
-            const url = id ? `/updateContactLog/id/${id}` : '/insertContactLog';
-            const method = id ? 'PUT' : 'POST'; // 更新はPUT、追加はPOST
+        const baseUrl = process.env.REACT_APP_API_BASE_URL; //
+                    const url = id ? `${baseUrl}/updateContactLog/id/${id}` : `${baseUrl}/insertContactLog`; //
+                    const method = id ? 'PUT' : 'POST'; // 更新はPUT、追加はPOST
 
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, lover, contactDate }), // IDも送信（更新の場合）
-            });
+                    const response = await fetch(url, { //
+                        method: method, //
+                        headers: { //
+                            'Content-Type': 'application/json', //
+                        }, //
+                        body: JSON.stringify({ id, lover, contactDate }), // IDも送信（更新の場合）
+                    }); //
 
             if (!response.ok) {
                 const errorData = await response.json();
