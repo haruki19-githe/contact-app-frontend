@@ -140,4 +140,3 @@ const cancelButtonStyle = {
 };
 
 export default AddContactForm;
-
